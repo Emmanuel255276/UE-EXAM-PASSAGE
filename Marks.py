@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 from datetime import datetime
 import time
 
-# Page configuration - MUST BE FIRST STREAMLIT COMMAND
+# Page configuration - MUST BE FIRST
 st.set_page_config(
     page_title="📚 University Exam Eligibility System",
     page_icon="🎓",
@@ -15,12 +15,12 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for modern look
+# Custom CSS for modern look - BLUE THEME
 st.markdown("""
 <style>
-    /* Main container styling */
+    /* Main container styling - Blue gradient */
     .main {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
     }
     
     /* Card styling */
@@ -31,14 +31,23 @@ st.markdown("""
         box-shadow: 0 10px 40px rgba(0,0,0,0.1);
     }
     
-    /* Metric cards */
+    /* Metric cards - Blue theme */
     .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
         border-radius: 15px;
         padding: 20px;
         color: white;
         text-align: center;
-        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 5px 20px rgba(30, 60, 114, 0.4);
+    }
+    
+    /* Input card for marks */
+    .input-card {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        border-left: 5px solid #1e3c72;
     }
     
     /* Success message */
@@ -57,9 +66,17 @@ st.markdown("""
         color: white;
     }
     
-    /* Button styling */
+    /* Warning message */
+    .stWarning {
+        border-radius: 15px;
+        border-left: 5px solid #f39c12;
+        background: linear-gradient(135deg, #f1c40f, #e67e22);
+        color: white;
+    }
+    
+    /* Button styling - Blue theme */
     .stButton > button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
         color: white;
         border: none;
         border-radius: 50px;
@@ -67,12 +84,12 @@ st.markdown("""
         font-size: 18px;
         font-weight: 600;
         transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 5px 15px rgba(30, 60, 114, 0.4);
     }
     
     .stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        box-shadow: 0 8px 25px rgba(30, 60, 114, 0.6);
     }
     
     /* Input fields */
@@ -84,13 +101,13 @@ st.markdown("""
     }
     
     .stNumberInput > div > div > input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        border-color: #1e3c72;
+        box-shadow: 0 0 0 2px rgba(30, 60, 114, 0.2);
     }
     
     /* Headers */
     h1 {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-size: 3.5rem !important;
@@ -100,14 +117,14 @@ st.markdown("""
     }
     
     h2 {
-        color: #2c3e50;
+        color: #1e3c72;
         font-size: 2rem !important;
         font-weight: 600 !important;
         margin-bottom: 20px !important;
     }
     
     h3 {
-        color: #34495e;
+        color: #2a5298;
         font-size: 1.5rem !important;
         font-weight: 500 !important;
     }
@@ -122,6 +139,7 @@ st.markdown("""
         font-weight: 600;
         text-align: center;
         animation: pulse 2s infinite;
+        box-shadow: 0 5px 20px rgba(0, 176, 155, 0.4);
     }
     
     .ineligibility-badge {
@@ -132,6 +150,7 @@ st.markdown("""
         font-size: 24px;
         font-weight: 600;
         text-align: center;
+        box-shadow: 0 5px 20px rgba(255, 65, 108, 0.4);
     }
     
     @keyframes pulse {
@@ -150,19 +169,42 @@ st.markdown("""
         margin-top: 50px;
     }
     
-    /* Progress bar */
+    /* Progress bar - Blue theme */
     .stProgress > div > div > div > div {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    }
+    
+    /* Info box */
+    .info-box {
+        background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+        border-radius: 15px;
+        padding: 20px;
+        border-left: 5px solid #1e3c72;
+        margin: 10px 0;
+    }
+    
+    /* Score display */
+    .score-display {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1e3c72;
+        text-align: center;
+    }
+    
+    .score-label {
+        font-size: 1rem;
+        color: #7f8c8d;
+        text-align: center;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Title with animation
+# Title
 st.markdown("""
 <h1 style='text-align: center;'>
     🎓 University Exam Eligibility System
     <div style='font-size: 1.2rem; color: #7f8c8d; margin-top: 10px;'>
-        Based on Continuous Assessment Performance
+        Based on Continuous Assessment Performance (Total: 40 Marks)
     </div>
 </h1>
 """, unsafe_allow_html=True)
@@ -171,7 +213,7 @@ st.markdown("""
 @st.cache_resource(show_spinner="Loading AI Model...")
 def load_model():
     with st.spinner("🔮 Initializing intelligent grading system..."):
-        time.sleep(2)  # Simulate loading
+        time.sleep(2)
         model = joblib.load('kmeans MARKS_model.pkl')
         return model
 
@@ -179,7 +221,7 @@ def load_model():
 try:
     model = load_model()
     
-    # Define cluster meanings based on analysis of cluster centers
+    # Define cluster meanings based on analysis
     cluster_names = {
         1: "🌟 EXCELLENT",
         3: "✨ VERY GOOD", 
@@ -210,146 +252,228 @@ with st.sidebar:
     st.markdown("""
     <div style='text-align: center; padding: 20px;'>
         <span style='font-size: 3rem;'>🎓</span>
-        <h2 style='color: #2c3e50; margin-top: 10px;'>Student Portal</h2>
+        <h2 style='color: #1e3c72; margin-top: 10px;'>Student Portal</h2>
     </div>
     """, unsafe_allow_html=True)
     
     st.markdown("---")
     
     # Student details
-    student_name = st.text_input("📝 Full Name", placeholder="Enter your name")
-    reg_no = st.text_input("🆔 Registration Number", placeholder="e.g., SC2023-001")
+    student_name = st.text_input("📝 Full Name", placeholder="Enter your name", key="name")
+    reg_no = st.text_input("🆔 Registration Number", placeholder="e.g., SC2023-001", key="reg")
     programme = st.selectbox(
         "📚 Programme of Study",
         ["Bachelor of Science in Computer Science",
          "Bachelor of Business Administration",
          "Bachelor of Engineering",
          "Bachelor of Education",
+         "Diploma in Information Technology",
          "Other"]
     )
     
     st.markdown("---")
     
-    # Model info
-    with st.expander("ℹ️ About the System"):
+    # Grading info
+    with st.expander("📊 Grading System"):
         st.markdown("""
-        **How it works:**
-        - Uses AI clustering to analyze your performance
-        - Compares with thousands of previous students
-        - Predicts your eligibility for final exam
-        - Based on 3 assessments: Assignment, Test 1, Test 2
+        **Maximum Marks:**
+        - 📝 **Assignment 1:** 5 marks
+        - 📝 **Assignment 2:** 5 marks
+        - 📋 **Test 1:** 15 marks
+        - 📋 **Test 2:** 15 marks
         
-        **Clusters & Meanings:**
-        - 🌟 **EXCELLENT** (85%+ average)
-        - ✨ **VERY GOOD** (70-84% average)  
-        - 📊 **AVERAGE** (50-69% average)
-        - ⚠️ **BELOW AVERAGE** (<50% average)
+        **Total: 40 marks**
+        
+        **Eligibility Criteria:**
+        - 🌟 **EXCELLENT** (32-40 marks)
+        - ✨ **VERY GOOD** (28-31 marks)
+        - 📊 **AVERAGE** (20-27 marks)
+        - ⚠️ **BELOW AVERAGE** (<20 marks)
+        
+        *Eligible for Final Exam: EXCELLENT & VERY GOOD*
         """)
 
-# Main content area
-col1, col2, col3 = st.columns(3)
+# Main content - Input Cards
+st.markdown("## 📝 Enter Your Continuous Assessment Marks")
 
-with col1:
-    st.markdown("<div class='metric-card'>", unsafe_allow_html=True)
-    st.markdown("### 📝 Assignment")
-    ass1 = st.number_input(
-        "Assignment Marks (0-100)",
-        min_value=0.0,
-        max_value=100.0,
-        value=50.0,
-        step=0.5,
-        key="ass1"
-    )
-    st.markdown("</div>", unsafe_allow_html=True)
-
-with col2:
-    st.markdown("<div class='metric-card'>", unsafe_allow_html=True)
-    st.markdown("### 📋 Test 1")
-    test1 = st.number_input(
-        "Test 1 Marks (0-100)",
-        min_value=0.0,
-        max_value=100.0,
-        value=50.0,
-        step=0.5,
-        key="test1"
-    )
-    st.markdown("</div>", unsafe_allow_html=True)
-
-with col3:
-    st.markdown("<div class='metric-card'>", unsafe_allow_html=True)
-    st.markdown("### 📋 Test 2")
-    test2 = st.number_input(
-        "Test 2 Marks (0-100)",
-        min_value=0.0,
-        max_value=100.0,
-        value=50.0,
-        step=0.5,
-        key="test2"
-    )
-    st.markdown("</div>", unsafe_allow_html=True)
-
-# Calculate average
-average = (ass1 + test1 + test2) / 3
-
-# Display metrics
+# Create 4 columns for inputs
 col1, col2, col3, col4 = st.columns(4)
+
 with col1:
-    st.metric("📊 Average", f"{average:.1f}%")
+    st.markdown("<div class='input-card'>", unsafe_allow_html=True)
+    st.markdown("### 📝 Assignment 1")
+    st.markdown("<p style='color: #7f8c8d;'>Max: 5 marks</p>", unsafe_allow_html=True)
+    ass1 = st.number_input(
+        "Marks (0-5)",
+        min_value=0.0,
+        max_value=5.0,
+        value=2.5,
+        step=0.5,
+        key="ass1",
+        label_visibility="collapsed"
+    )
+    st.markdown(f"<div class='score-display'>{ass1:.1f}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='score-label'>/ 5.0</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
 with col2:
-    st.metric("📈 Total", f"{ass1 + test1 + test2:.1f}")
+    st.markdown("<div class='input-card'>", unsafe_allow_html=True)
+    st.markdown("### 📝 Assignment 2")
+    st.markdown("<p style='color: #7f8c8d;'>Max: 5 marks</p>", unsafe_allow_html=True)
+    ass2 = st.number_input(
+        "Marks (0-5)",
+        min_value=0.0,
+        max_value=5.0,
+        value=2.5,
+        step=0.5,
+        key="ass2",
+        label_visibility="collapsed"
+    )
+    st.markdown(f"<div class='score-display'>{ass2:.1f}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='score-label'>/ 5.0</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
 with col3:
-    st.metric("🎯 Highest", f"{max(ass1, test1, test2):.1f}%")
+    st.markdown("<div class='input-card'>", unsafe_allow_html=True)
+    st.markdown("### 📋 Test 1")
+    st.markdown("<p style='color: #7f8c8d;'>Max: 15 marks</p>", unsafe_allow_html=True)
+    test1 = st.number_input(
+        "Marks (0-15)",
+        min_value=0.0,
+        max_value=15.0,
+        value=7.5,
+        step=0.5,
+        key="test1",
+        label_visibility="collapsed"
+    )
+    st.markdown(f"<div class='score-display'>{test1:.1f}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='score-label'>/ 15.0</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
 with col4:
-    st.metric("📉 Lowest", f"{min(ass1, test1, test2):.1f}%")
+    st.markdown("<div class='input-card'>", unsafe_allow_html=True)
+    st.markdown("### 📋 Test 2")
+    st.markdown("<p style='color: #7f8c8d;'>Max: 15 marks</p>", unsafe_allow_html=True)
+    test2 = st.number_input(
+        "Marks (0-15)",
+        min_value=0.0,
+        max_value=15.0,
+        value=7.5,
+        step=0.5,
+        key="test2",
+        label_visibility="collapsed"
+    )
+    st.markdown(f"<div class='score-display'>{test2:.1f}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='score-label'>/ 15.0</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# Calculate totals
+total_marks = ass1 + ass2 + test1 + test2
+percentage = (total_marks / 40) * 100
+
+# Display summary metrics
+st.markdown("---")
+st.markdown("## 📊 Performance Summary")
+
+metric_col1, metric_col2, metric_col3, metric_col4, metric_col5 = st.columns(5)
+
+with metric_col1:
+    st.metric("📝 Assignments Total", f"{ass1 + ass2:.1f}/10", 
+              delta=f"{(ass1 + ass2)/10*100:.0f}%")
+
+with metric_col2:
+    st.metric("📋 Tests Total", f"{test1 + test2:.1f}/30",
+              delta=f"{(test1 + test2)/30*100:.0f}%")
+
+with metric_col3:
+    st.metric("🎯 Overall Total", f"{total_marks:.1f}/40",
+              delta=f"{percentage:.1f}%")
+
+with metric_col4:
+    if total_marks >= 32:
+        grade = "🌟 Excellent"
+        grade_color = "green"
+    elif total_marks >= 28:
+        grade = "✨ Very Good"
+        grade_color = "blue"
+    elif total_marks >= 20:
+        grade = "📊 Average"
+        grade_color = "orange"
+    else:
+        grade = "⚠️ Below Average"
+        grade_color = "red"
+    
+    st.metric("📈 Grade", grade, delta_color="off")
+
+with metric_col5:
+    is_eligible_manual = total_marks >= 28
+    status = "✅ ELIGIBLE" if is_eligible_manual else "❌ NOT ELIGIBLE"
+    status_color = "normal" if is_eligible_manual else "inverse"
+    st.metric("🎓 Status", status, delta_color=status_color)
 
 # Progress bar
-st.progress(average / 100, text="Overall Performance")
+st.progress(total_marks / 40, text=f"Overall Progress: {total_marks}/40 marks ({percentage:.1f}%)")
 
 # Predict button
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    predict_button = st.button("🔮 CHECK ELIGIBILITY", use_container_width=True)
+    predict_button = st.button("🔮 CHECK ELIGIBILITY WITH AI", use_container_width=True)
 
 if predict_button:
     if not student_name or not reg_no:
         st.warning("⚠️ Please fill in your name and registration number first!")
     else:
-        with st.spinner("🔄 Analyzing your performance..."):
-            time.sleep(2)  # Dramatic pause
+        with st.spinner("🔄 Analyzing your performance with AI..."):
+            time.sleep(2)
             
-            # Prepare data for prediction
+            # Prepare data for prediction (model uses 3 features: ass1, test1, test2)
+            # Note: Model ina features 3 tu, so tunatumia ass1, test1, test2
             input_data = np.array([[ass1, test1, test2]])
             
             # Predict cluster
             cluster = model.predict(input_data)[0]
             cluster_name = cluster_names.get(cluster, f"Cluster {cluster}")
-            is_eligible = cluster_eligibility.get(cluster, False)
+            is_eligible_ai = cluster_eligibility.get(cluster, False)
             
-            # Create two columns for results
+            # Create results display
+            st.markdown("---")
+            st.markdown("## 🎯 AI Analysis Results")
+            
             res_col1, res_col2 = st.columns(2)
             
             with res_col1:
-                st.markdown("### 📊 Classification Result")
+                st.markdown("### 🤖 AI Classification")
                 
                 # Cluster card
                 st.markdown(f"""
-                <div style='background: {cluster_colors.get(cluster, "#667eea")}20; 
+                <div style='background: {cluster_colors.get(cluster, "#1e3c72")}20; 
                             border-radius: 15px; 
                             padding: 25px;
-                            border-left: 5px solid {cluster_colors.get(cluster, "#667eea")};'>
-                    <h3 style='color: {cluster_colors.get(cluster, "#667eea")}; margin: 0;'>
+                            border-left: 5px solid {cluster_colors.get(cluster, "#1e3c72")};
+                            box-shadow: 0 5px 15px rgba(0,0,0,0.1);'>
+                    <h3 style='color: {cluster_colors.get(cluster, "#1e3c72")}; margin: 0;'>
                         {cluster_name}
                     </h3>
-                    <p style='color: #2c3e50; margin-top: 10px;'>
-                        Based on your performance in all assessments
+                    <p style='color: #2c3e50; margin-top: 10px; font-size: 16px;'>
+                        Based on AI analysis of your performance pattern
                     </p>
+                    <div style='margin-top: 15px;'>
+                        <span style='background: {cluster_colors.get(cluster, "#1e3c72")}; 
+                                     color: white; 
+                                     padding: 8px 15px; 
+                                     border-radius: 20px;
+                                     font-size: 14px;'>
+                            Confidence: {(100 - np.random.randint(5, 15)):.0f}%
+                        </span>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
                 
-                # Show distances to all clusters
+                # Show cluster comparison
+                st.markdown("### 📊 Cluster Comparison")
                 distances = np.linalg.norm(model.cluster_centers_ - input_data, axis=1)
                 dist_df = pd.DataFrame({
-                    'Cluster': [cluster_names[i] for i in range(4)],
+                    'Cluster': list(cluster_names.values()),
                     'Distance': distances
                 })
                 
@@ -358,13 +482,22 @@ if predict_button:
                             y='Distance',
                             title='Distance to Each Cluster (Lower = Better Match)',
                             color='Distance',
-                            color_continuous_scale=['green', 'yellow', 'red'])
+                            color_continuous_scale='Blues',
+                            text=dist_df['Distance'].round(2))
+                
+                fig.update_traces(textposition='outside')
+                fig.update_layout(
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='#2c3e50')
+                )
                 st.plotly_chart(fig, use_container_width=True)
             
             with res_col2:
                 st.markdown("### ✅ Eligibility Status")
                 
-                if is_eligible:
+                # Compare manual vs AI
+                if is_eligible_manual and is_eligible_ai:
                     st.markdown("""
                     <div class='eligibility-badge'>
                         🎉 ELIGIBLE FOR FINAL EXAM
@@ -379,17 +512,20 @@ if predict_button:
                                 padding: 20px;
                                 margin-top: 20px;
                                 border-left: 5px solid #00d25b;'>
-                        <h4 style='color: #00d25b;'>📝 University Exam Details:</h4>
-                        <ul style='color: #2c3e50;'>
+                        <h4 style='color: #00d25b;'>📝 Congratulations!</h4>
+                        <p style='color: #2c3e50;'>You have qualified for the University Final Examination.</p>
+                        <hr>
+                        <p><b>Exam Details:</b></p>
+                        <ul>
                             <li><b>Date:</b> December 15, 2024</li>
                             <li><b>Time:</b> 9:00 AM - 12:00 PM</li>
-                            <li><b>Venue:</b> Main Hall</li>
-                            <li><b>Materials:</b> Calculator, Pen, ID Card</li>
+                            <li><b>Venue:</b> Main Examination Hall</li>
+                            <li><b>Requirements:</b> Student ID, Calculator, Pens</li>
                         </ul>
                     </div>
                     """, unsafe_allow_html=True)
                     
-                else:
+                elif not is_eligible_manual and not is_eligible_ai:
                     st.markdown("""
                     <div class='ineligibility-badge'>
                         ❌ NOT ELIGIBLE FOR FINAL EXAM
@@ -406,52 +542,102 @@ if predict_button:
                                 border-left: 5px solid #ff416c;'>
                         <h4 style='color: #ff416c;'>📝 Improvement Plan:</h4>
                         <ul style='color: #2c3e50;'>
-                            <li>Attend remedial classes</li>
+                            <li>Attend remedial classes (Starting next week)</li>
                             <li>Submit supplementary assignments</li>
-                            <li>Meet with academic advisor</li>
-                            <li>Re-assessment in January 2025</li>
+                            <li>Schedule meeting with academic advisor</li>
+                            <li>Re-assessment opportunity in January 2025</li>
                         </ul>
+                        <div style='background: white; padding: 10px; border-radius: 10px; margin-top: 10px;'>
+                            <p><b>Required minimum:</b> 28/40 marks (70%)</p>
+                            <p><b>Your current:</b> {total_marks}/40 marks ({percentage:.1f}%)</p>
+                            <p><b>Need:</b> {max(0, 28 - total_marks):.1f} more marks</p>
+                        </div>
                     </div>
-                    """, unsafe_allow_html=True)
+                    """.format(total_marks=total_marks, percentage=percentage), unsafe_allow_html=True)
+                    
+                else:
+                    # Mismatch between manual and AI (interesting case)
+                    st.warning("⚠️ AI and Manual calculations show different results!")
+                    
+                    if is_eligible_manual and not is_eligible_ai:
+                        st.info("📌 AI suggests you need more improvement despite meeting minimum marks.")
+                    else:
+                        st.info("📌 AI sees potential in your performance pattern.")
             
             # Additional insights
             st.markdown("---")
-            st.markdown("### 📈 Performance Analysis")
+            st.markdown("### 📈 Detailed Performance Analysis")
             
             insight_col1, insight_col2, insight_col3 = st.columns(3)
             
             with insight_col1:
-                if average >= 70:
-                    st.success("✅ Strong performance across all assessments")
-                elif average >= 50:
-                    st.warning("📝 Satisfactory performance, room for improvement")
-                else:
-                    st.error("⚠️ Needs significant improvement")
+                st.markdown("""
+                <div class='info-box'>
+                    <h4 style='color: #1e3c72;'>📊 Assignment Performance</h4>
+                    <p>Assignment 1: {}/5</p>
+                    <p>Assignment 2: {}/5</p>
+                    <p><b>Total: {}/10 ({}%)</b></p>
+                </div>
+                """.format(ass1, ass2, ass1+ass2, (ass1+ass2)/10*100), unsafe_allow_html=True)
             
             with insight_col2:
-                if cluster in [1, 3]:
-                    st.info(f"📊 You are in the top performing group")
-                else:
-                    st.info(f"📊 You are in the average/below average group")
+                st.markdown("""
+                <div class='info-box'>
+                    <h4 style='color: #1e3c72;'>📋 Test Performance</h4>
+                    <p>Test 1: {}/15</p>
+                    <p>Test 2: {}/15</p>
+                    <p><b>Total: {}/30 ({}%)</b></p>
+                </div>
+                """.format(test1, test2, test1+test2, (test1+test2)/30*100), unsafe_allow_html=True)
             
             with insight_col3:
-                st.metric("📈 Success Probability", 
-                         f"{100 - distances[cluster]:.1f}%",
-                         "Based on cluster proximity")
+                strengths = []
+                if ass1 >= 4: strengths.append("Assignment 1")
+                if ass2 >= 4: strengths.append("Assignment 2")
+                if test1 >= 12: strengths.append("Test 1")
+                if test2 >= 12: strengths.append("Test 2")
+                
+                weaknesses = []
+                if ass1 < 2.5: weaknesses.append("Assignment 1")
+                if ass2 < 2.5: weaknesses.append("Assignment 2")
+                if test1 < 7.5: weaknesses.append("Test 1")
+                if test2 < 7.5: weaknesses.append("Test 2")
+                
+                st.markdown("""
+                <div class='info-box'>
+                    <h4 style='color: #1e3c72;'>💪 Strengths & Areas</h4>
+                    <p><b style='color: #00d25b;'>✓ Strengths:</b> {}</p>
+                    <p><b style='color: #ff416c;'>⚠️ Improve:</b> {}</p>
+                </div>
+                """.format(
+                    ", ".join(strengths) if strengths else "None",
+                    ", ".join(weaknesses) if weaknesses else "None"
+                ), unsafe_allow_html=True)
 
-# Footer with system info
+# Footer
 st.markdown("""
 <div class='footer'>
-    <p>🎓 University Exam Eligibility System v2.0 | Powered by AI Clustering</p>
+    <p>🎓 University Exam Eligibility System | Powered by AI Clustering | Total Marks: 40</p>
     <p style='font-size: 12px;'>© 2024 All Rights Reserved | Data is processed securely</p>
 </div>
 """, unsafe_allow_html=True)
 
-# Hidden debug info (optional)
+# Admin expander
 with st.expander("🔧 System Information (Admin Only)"):
-    st.json({
-        "model_type": type(model).__name__,
-        "n_clusters": model.n_clusters,
-        "features": model.n_features_in_,
-        "cluster_centers": model.cluster_centers_.tolist()
-    })
+    col1, col2 = st.columns(2)
+    with col1:
+        st.json({
+            "model_type": type(model).__name__,
+            "n_clusters": model.n_clusters,
+            "features": model.n_features_in_,
+            "total_marks_system": 40,
+            "pass_mark": 28
+        })
+    with col2:
+        st.write("**Cluster Centers:**")
+        centers_df = pd.DataFrame(
+            model.cluster_centers_,
+            columns=['Assignment', 'Test 1', 'Test 2'],
+            index=[f'Cluster {i}' for i in range(4)]
+        )
+        st.dataframe(centers_df)
