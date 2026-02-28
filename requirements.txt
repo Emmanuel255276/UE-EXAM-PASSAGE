@@ -5,5 +5,5 @@ scikit-learn==1.5.2
 plotly==5.24.1
 joblib==1.4.2
 protobuf==5.28.3
-pillow==11.0.0
+pillow==10.4.0
 packaging==24.2
